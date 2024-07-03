@@ -13,12 +13,12 @@ import gym
 import numpy as np
 import torch
 
-from cs285.infrastructure import pytorch_util as ptu
-from cs285.infrastructure import utils
-from cs285.infrastructure.logger import Logger
-from cs285.infrastructure.replay_buffer import ReplayBuffer
-from cs285.policies.MLP_policy import MLPPolicySL
-from cs285.policies.loaded_gaussian_policy import LoadedGaussianPolicy
+from infrastructure import pytorch_util as ptu
+from infrastructure import utils
+from infrastructure.logger import Logger
+from infrastructure.replay_buffer import ReplayBuffer
+from policies.MLP_policy import MLPPolicySL
+from policies.loaded_gaussian_policy import LoadedGaussianPolicy
 
 
 # how many rollouts to save as videos to tensorboard
@@ -209,15 +209,15 @@ def run_training_loop(params):
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--expert_policy_file', '-epf', type=str, required=True)  # relative to where you're running this script from
+    parser.add_argument('--expert_policy_file', '-epf', type=str, default='policies/experts/Ant.pkl', required=True)  # relative to where you're running this script from
     parser.add_argument('--expert_data', '-ed', type=str, required=True) #relative to where you're running this script from
-    parser.add_argument('--env_name', '-env', type=str, help=f'choices: {", ".join(MJ_ENV_NAMES)}', required=True)
-    parser.add_argument('--exp_name', '-exp', type=str, default='pick an experiment name', required=True)
+    parser.add_argument('--env_name', '-env', type=str, default='Ant-v4', help=f'choices: {", ".join(MJ_ENV_NAMES)}', required=True)
+    parser.add_argument('--exp_name', '-exp', type=str, default='dagger_ant', required=True)
     parser.add_argument('--do_dagger', action='store_true')
     parser.add_argument('--ep_len', type=int)
 
     parser.add_argument('--num_agent_train_steps_per_iter', type=int, default=1000)  # number of gradient steps for training policy (per iter in n_iter)
-    parser.add_argument('--n_iter', '-n', type=int, default=1)
+    parser.add_argument('--n_iter', '-n', type=int, default=10)
 
     parser.add_argument('--batch_size', type=int, default=1000)  # training data collected (in the env) during each iteration
     parser.add_argument('--eval_batch_size', type=int,
